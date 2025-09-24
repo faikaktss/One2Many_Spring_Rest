@@ -1,7 +1,7 @@
-# 🔗 Spring Entity Relations API
+# 🔗 One2Many_Spring_Rest
 
 Merhaba!  
-Bu proje, **Spring Boot** ve **Spring Data JPA** kullanarak hem bire bir (**one-to-one**) hem de bire-çok (**one-to-many**) ilişkili varlıklar için modern, profesyonel ve katmanlı bir RESTful API örneğidir.  
+Bu proje, **Spring Boot** ve **Spring Data JPA** kullanarak hem bire bir (one-to-one) hem de bire-çok (one-to-many) ilişkili varlıklar için modern, profesyonel ve katmanlı bir RESTful API örneğidir.  
 DTO, validasyon, global hata yönetimi ve sürdürülebilir mimari ile kurumsal düzeyde, ilişkisel veri modellemenin en iyi uygulamalarını sunar.
 
 ---
@@ -144,7 +144,7 @@ src/main/java/com/faik/
 
 1. Repoyu klonla:
    ```bash
-   git clone https://github.com/faikaktss/spring-entity-relations-api.git
+   git clone https://github.com/faikaktss/One2Many_Spring_Rest.git
    ```
 2. `application.properties` dosyasındaki veritabanı bağlantı ayarlarını yapılandır.
 3. Projeyi başlat:
