@@ -1,19 +1,26 @@
-# 🎓 Spring Student Directory
+# 🔗 Spring Entity Relations API
 
 Merhaba!  
-Bu proje, **Spring Boot**, **Spring Data JPA** ve katmanlı mimari kullanılarak geliştirilmiş modern bir öğrenci yönetim REST API'sidir.  
-Amaç; temiz kod, DTO, servis, repository ve controller yapılarının gerçek bir projede nasıl kullanılacağını göstermek ve öğrenmektir.
+Bu proje, **Spring Boot** ve **Spring Data JPA** kullanarak hem bire bir (**one-to-one**) hem de bire-çok (**one-to-many**) ilişkili varlıklar için modern, profesyonel ve katmanlı bir RESTful API örneğidir.  
+DTO, validasyon, global hata yönetimi ve sürdürülebilir mimari ile kurumsal düzeyde, ilişkisel veri modellemenin en iyi uygulamalarını sunar.
 
 ---
 
 ## 🚀 Özellikler
 
-- 📝 Öğrenci ekle, listele, güncelle, sil (CRUD)
-- 💾 Spring Data JPA ile veritabanı işlemleri (Entity, Repository)
-- 🪄 DTO yapısı ile veri transferi
-- 🧩 Katmanlı mimari (Controller, Service, Repository, Entity, DTO)
-- 🔄 Bean ve dependency injection ile gevşek bağlılık
-- 🛡️ Temiz ve anlaşılır kod
+- 🔄 **One-to-One ve One-to-Many Entity İlişkileri:**  
+  - **One-to-One:** Customer–Address, Student gibi birebir ilişkiler.
+  - **One-to-Many:** Home–Room ilişkisiyle bir evin birden fazla odası olabilir.
+- 📦 **DTO Kullanımı:**  
+  Tüm veri alışverişlerinde DTO’lar ile güvenli ve sade transfer.
+- 💾 **Spring Data JPA ile CRUD:**  
+  Entity’ler için otomatik repository ve veritabanı işlemleri.
+- 🧩 **Katmanlı Mimari ve Temiz Kod:**  
+  Controller, Service, Repository, DTO, Entity ve Exception katmanları.
+- ✅ **Validasyon & Hata Yönetimi:**  
+  Alan doğrulama (@Valid, @NotNull, @Email, @Size…) ve merkezi exception handler.
+- 🛡️ **Kurumsal Seviye Prensipler:**  
+  Açıklamalı, sürdürülebilir ve ölçeklenebilir kod yapısı.
 
 ---
 
@@ -23,84 +30,142 @@ Amaç; temiz kod, DTO, servis, repository ve controller yapılarının gerçek b
 src/main/java/com/faik/
 ├── Controller/
 │   ├── Impl/
-│   │   └── StudentControllerImpl.java   # REST API controller implementasyonu
-│   └── IStudentController.java          # Controller arayüzü (interface)
-│
-├── dto/
-│   ├── DtoStudent.java                  # Öğrenci DTO'su (dışarıya dönen veri)
-│   └── DtoStudentIU.java                # Öğrenci input/update DTO'su (kayıt/güncelleme için)
-│
-├── Entites/
-│   └── Student.java                     # JPA Entity (veritabanı modeli)
-│
-├── Repository/
-│   └── StudentRepository.java           # JPA repository interface'i
+│   │   ├── StudentControllerImpl.java
+│   │   ├── CustomerControllerImpl.java
+│   │   ├── AddressControllerImpl.java
+│   │   └── HomeController.java
+│   ├── IStudentController.java
+│   ├── ICustomerController.java
+│   ├── IAddressController.java
+│   └── IHomeController.java
 │
 ├── Services/
 │   ├── Impl/
-│   │   └── StudentServiceImpl.java      # Servis katmanı implementasyonu
-│   └── IStudentService.java             # Servis arayüzü
+│   │   ├── StudentServiceImpl.java
+│   │   ├── CustomerService.java
+│   │   ├── AddressServiceImpl.java
+│   │   └── HomeServiceImpl.java
+│   ├── IStudentService.java
+│   ├── ICustomerService.java
+│   ├── IAddressService.java
+│   └── IHomeServices.java
+│
+├── Repository/
+│   ├── StudentRepository.java
+│   ├── CustomerRepository.java
+│   ├── AddressRepository.java
+│   └── HomeRepository.java
+│
+├── Entites/
+│   ├── Student.java
+│   ├── Customer.java
+│   ├── Address.java
+│   ├── Home.java          # (One-to-Many: List<Room>)
+│   └── Room.java          # (Many-to-One: Home)
+│
+├── dto/
+│   ├── DtoStudent.java
+│   ├── DtoStudentIU.java
+│   ├── DtoCustomer.java
+│   ├── DtoAddress.java
+│   ├── DtoHome.java       # (Home DTO’su, rooms listesi ile)
+│   └── DtoRoom.java       # (Room DTO’su)
+│
+├── exception/
+│   ├── ApiError.java
+│   └── GlobalExecptionHandler.java
 │
 └── Starter/
-    └── Application.java                 # Uygulama başlatıcı (SpringBootApplication)
+    └── Application.java
 ```
 
 ---
 
-## 🧑‍💻 Katmanlar ve Görevleri
+## 🔗 Entity İlişkileri
 
-- **Controller:**  
-  API uç noktalarını tanımlar, gelen istekleri karşılar ve DTO ile veri dönüşü yapar.
+### 🟢 One-to-One  
+- **Customer** ↔ **Address**  
+  Her müşteri için bir adres, her adres için bir müşteri tutulur.
 
-- **DTO (Data Transfer Object):**  
-  Veri transferini sadeleştirir ve dışarıya sadece gerekli verileri açar.
-
-- **Entity:**  
-  Veritabanı tablosunu temsil eder, JPA ile ilişkilidir.
-
-- **Repository:**  
-  JPA ile CRUD işlemlerini sağlar.
-
-- **Service:**  
-  İş mantığını ve veri işlemlerini yönetir, controller ile repository arasında köprü görevi görür.
+### 🟦 One-to-Many  
+- **Home** ➡️ **Room**  
+  Bir evin birden fazla odası olabilir; Home entity’sinde `List<Room>` ile ifade edilir.
 
 ---
 
 ## 🛣️ API Endpointleri
 
-| Metot | Endpoint                        | Açıklama                      |
-|-------|---------------------------------|-------------------------------|
-| POST  | `/rest/api/student/save`        | Yeni öğrenci kaydı            |
-| GET   | `/rest/api/student/list`        | Tüm öğrencileri listeler      |
-| GET   | `/rest/api/student/list/{id}`   | ID’ye göre öğrenci getirir    |
-| PUT   | `/rest/api/student/update/{id}` | Öğrenci güncelleme            |
-| GET   | `/rest/api/student/delete/{id}` | Öğrenci silme                 |
+### Student API (`/rest/api/student`)
+| Metot | Endpoint                        | Açıklama                        |
+|-------|---------------------------------|---------------------------------|
+| POST  | `/save`                         | Yeni öğrenci ekler              |
+| GET   | `/list`                         | Tüm öğrencileri listeler        |
+| GET   | `/list/{id}`                    | Belirli öğrenciyi getirir       |
+| PUT   | `/update/{id}`                  | Öğrenci günceller               |
+| GET   | `/delete/{id}`                  | Öğrenci siler                   |
+
+### Customer API (`/rest/api/customer`)
+| Metot | Endpoint            | Açıklama                |
+|-------|---------------------|-------------------------|
+| GET   | `/list/{id}`        | ID ile müşteri getirir  |
+
+### Address API (`/rest/api/address`)
+| Metot | Endpoint            | Açıklama                |
+|-------|---------------------|-------------------------|
+| GET   | `/list/{id}`        | ID ile adres getirir    |
+
+### Home API (`/rest/api/home`)
+| Metot | Endpoint         | Açıklama                          |
+|-------|------------------|-----------------------------------|
+| GET   | `/{id}`          | Evin bilgisini ve odalarını getir |
 
 ---
 
-## ⚙️ Çalıştırmak İçin
+## 🧩 Katmanların Görevleri
+
+- **Controller:** API endpointlerini tanımlar, DTO ile veri alışverişi ve validasyonu yönetir.
+- **Service:** İş mantığını kapsar, controller ve repository arasında köprü görevi görür.
+- **Repository:** Spring Data JPA ile CRUD işlemlerini kolaylaştırır.
+- **Entity:** Veritabanı tablolarını ve ilişkileri yansıtan model sınıfları.
+- **DTO:** Sadece ihtiyaç duyulan veriyi dış dünyaya açan transfer nesneleri.
+- **Exception:** Hataları merkezi olarak yönetir, kullanıcıya anlamlı mesajlar döner.
+
+---
+
+## 🛡️ Validasyon ve Hata Yönetimi
+
+- DTO’larda annotasyonlarla (@NotEmpty, @Email, @Size, vs.) alan doğrulama.
+- GlobalExecptionHandler ile tüm validasyon ve diğer hatalar özelleştirilmiş biçimde döner.
+- Hatalar, API yanıtında: id, zaman ve detaylı hata mesajlarıyla gösterilir.
+
+---
+
+## ⚙️ Projeyi Çalıştırmak İçin
 
 1. Repoyu klonla:
    ```bash
-   git clone https://github.com/faikaktss/spring-student-directory.git
+   git clone https://github.com/faikaktss/spring-entity-relations-api.git
    ```
-2. Gerekli veritabanı ve `application.properties` ayarlarını yap.
+2. `application.properties` dosyasındaki veritabanı bağlantı ayarlarını yapılandır.
 3. Projeyi başlat:
    ```bash
    ./mvnw spring-boot:run
    ```
-   veya
-   ```bash
-   mvn spring-boot:run
-   ```
-4. API endpointlerini Postman veya benzeri bir araç ile test edebilirsin.
+4. API endpointlerini Postman veya benzeri araçlarla test edebilirsin.
 
 ---
 
-## 🔗 Katkı ve Geri Bildirim
+## 💡 Notlar
 
-- Kodlarımda bol bol açıklama ve sadeleşme vardır, öğrenen herkesin faydalanması için hazırlanmıştır.
-- Her türlü katkı, öneri ve sorular için iletişime geçebilirsin!
+- Kodlar açıklamalı ve hem başlangıç hem ileri seviye geliştiriciler için tasarlanmıştır.
+- Kurumsal projelerdeki en iyi pratikleri ve gelişmiş ilişkisel veri modellemesini yansıtır.
+- Katkı, öneri ve soruların için iletişime geçebilirsin!
 
+---
 
+## 👨‍💻 Geliştirici
 
+Faik Aktaş  
+[GitHub Profilim](https://github.com/faikaktss)
+
+---
